@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+	<Properties>
+		<Property name="SYSTEM_LOG_PATTERN">
+			%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%ex
+		</Property>
+		<Property name="ACCESS_LOG_PATTERN">
+			%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %m%n%ex
+		</Property>
+	</Properties>
+	<Appenders>
+		<Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
+			<PatternLayout pattern="${SYSTEM_LOG_PATTERN}" />
+		</Console>
+		<RollingFile name="SystemLogFileAppender" fileName="/var/log/containers/etf-system.log" filePattern="/var/log/containers/etf-system-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<Pattern>${SYSTEM_LOG_PATTERN}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" />
+			</Policies>
+		</RollingFile>
+		<RollingFile name="ErrorLogFileAppender" fileName="/var/log/containers/etf-error.log" filePattern="/var/log/containers/etf-error-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<Pattern>${SYSTEM_LOG_PATTERN}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" />
+			</Policies>
+		</RollingFile>
+		<RollingFile name="AccessLogFileAppender" fileName="/var/log/containers/etf-access.log" filePattern="/var/log/containers/etf-access-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<Pattern>${ACCESS_LOG_PATTERN}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" />
+			</Policies>
+		</RollingFile>
+		<RollingFile name="DebugLogFileAppender" fileName="/var/log/containers/eft-debug.log" filePattern="/var/log/containers/etf-debug-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<Pattern>${SYSTEM_LOG_PATTERN}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" />
+			</Policies>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Logger name="etf.systemlog" level="debug" additivity="false">
+			<AppenderRef ref="SystemLogFileAppender" />
+			<AppenderRef ref="ConsoleAppender" />
+		</Logger>
+		<Logger name="etf.errorlog" level="debug" additivity="false">
+			<AppenderRef ref="ErrorLogFileAppender" />
+			<AppenderRef ref="SystemLogFileAppender" />
+			<AppenderRef ref="ConsoleAppender" />
+		</Logger>
+		<Logger name="etf.accesslog" level="debug" additivity="false">
+			<AppenderRef ref="AccessLogFileAppender" />
+			<AppenderRef ref="SystemLogFileAppender" />
+			<AppenderRef ref="ConsoleAppender" />
+		</Logger>
+		<Root level="info">
+			<AppenderRef ref="ConsoleAppender" />
+			<AppenderRef ref="SystemLogFileAppender" />
+			<AppenderRef ref="DebugLogFileAppender" />
+		</Root>
+	</Loggers>
+</Configuration>
